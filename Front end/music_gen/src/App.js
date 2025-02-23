@@ -1,120 +1,198 @@
-import React, { useState } from "react";
-import "./style.css";
-import "bootstrap/dist/css/bootstrap.min.css"; // Import Bootstrap CSS
+import React, { useState } from 'react';
+import './App.css'; // Import CSS for styling
+import Client from './client';
 
 function App() {
-  // State to store user inputs
-  const [topic, setTopic] = useState("");
-  const [mood, setMood] = useState("");
-  const [location, setLocation] = useState("");
-  const [lyrics, setLyrics] = useState("");
+  const [formData, setFormData] = useState({
+    theme: '',
+    storyline: '',
+    mood: '',
+    location: '',
+  });
 
-  // Function to generate lyrics (placeholder logic)
-  const generateLyrics = () => {
-    const generatedLyrics = `🎵 On the topic of ${topic}, 
-In a ${mood} mood, 
-Here in ${location}, 
-We sing this tune... 🎤
+  const [lyrics, setLyrics] = useState('');
+  const [history, setHistory] = useState(
+    JSON.parse(localStorage.getItem('lyricsHistory')) || []
+  );
+  const [showHistory, setShowHistory] = useState(false);
+  const [isLoading, setIsLoading] = useState(false); // State for loader
 
-Verse 1:
-In ${location}, where the ${topic} thrives,
-Under ${mood} skies, our dreams come alive.
-With every beat, our hearts align,
-A melody of ${topic}, so divine.
-
-Chorus:
-Oh ${topic}, in ${location} we stand,
-With ${mood} hearts, we make our stand.
-This song of ${topic}, forever true,
-In ${location}, we sing for you! 🎤`;
-
-    setLyrics(generatedLyrics);
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
   };
 
-  const cancel = () => {
-    setLyrics("");
+  const generateLyrics = async () => {
+    const { theme, storyline, mood, location } = formData;
+
+    if (!theme || !storyline || !mood || !location) {
+      alert('Please fill all the fields!');
+      return;
+    }
+
+    setIsLoading(true); // Start loader
+
+    try {
+      // Call the API using the Client function
+      const clientResponse = await Client(formData, "POST");
+
+      // Extract the song from the response
+      const generatedSong = clientResponse.song;
+
+      // Store the generated song in local storage
+      localStorage.setItem('lastGeneratedSong', generatedSong);
+
+      // Update the lyrics state
+      setLyrics(generatedSong);
+
+      // Create a template for history
+      const lyricsTemplate = `
+        Theme: ${theme}
+        Storyline: ${storyline}
+        Mood: ${mood}
+        Location: ${location}
+
+        ${generatedSong}
+      `;
+
+      // Update history
+      const newHistory = [
+        { id: Date.now(), theme: theme, lyrics: lyricsTemplate },
+        ...history,
+      ];
+      setHistory(newHistory);
+      localStorage.setItem('lyricsHistory', JSON.stringify(newHistory));
+    } catch (error) {
+      console.error('Error generating lyrics:', error);
+      alert('Failed to generate lyrics. Please try again.');
+    } finally {
+      setIsLoading(false); // Stop loader
+    }
+  };
+
+  const handleCancel = () => {
+    setLyrics('');
+  };
+
+  const viewHistoryLyrics = (lyrics) => {
+    setLyrics(lyrics);
   };
 
   return (
-    <div className="container mt-5 "  >
-      <img src="https://wall.alphacoders.com/big.php?i=218994"></img>
-      <header>
-      <h1 className="text-center text-primary">🎤 Song Generator 🎵</h1>
+    <div className="app-container">
+      {/* Header Section */}
+      <header className="header">
+        <h1 className="app-title">🎵 Song Lyrics Generator 🎵</h1>
+        <button
+          className="history-button"
+          onClick={() => setShowHistory(!showHistory)}
+        >
+          History
+        </button>
       </header>
-      <div className="row justify-content-center mt-4">
-        <div className="col-md-6">
-          <div className="mb-3">
-            <label htmlFor="topic" className="form-label">
-              Topic
-            </label>
-            <input
-              type="text"
-              className="form-control"
-              id="topic"
-              placeholder="e.g., Love, Nature, Adventure"
-              value={topic}
-              onChange={(e) => setTopic(e.target.value)}
-            />
-          </div>
-          <div className="mb-3">
-            <label htmlFor="mood" className="form-label">
-              Mood
-            </label>
-            <input
-              type="text"
-              className="form-control"
-              id="mood"
-              placeholder="e.g., Happy, Sad, Energetic"
-              value={mood}
-              onChange={(e) => setMood(e.target.value)}
-            />
-          </div>
-          <div className="mb-3">
-            <label htmlFor="location" className="form-label">
-              Location
-            </label>
-            <input
-              type="text"
-              className="form-control"
-              id="location"
-              placeholder="e.g., Paris, Beach, Mountains"
-              value={location}
-              onChange={(e) => setLocation(e.target.value)}
-            />
-          </div>
-          <center>
-          <button
-            className="btn btn-success w-50"
-            onClick={generateLyrics}
-          >
-            Generate Song Lyrics
-          </button> </center>
-        </div>
-      </div>
 
-      {/* Display Generated Lyrics */}
-      {lyrics && (
-        <div className="row justify-content-center mt-4">
-          <div className="col-md-8">
-            <div className="card">
-              <div className="card-body">
-                <h5 className="card-title text-center">🎵 Your Song Lyrics 🎤</h5>
-                <pre className="card-text" style={{ whiteSpace: "pre-wrap" }}>
-                  {lyrics}
-                </pre>
-              </div>
-            </div>
-            <center>
-            <button
-            className="btn btn-secondary w-40  my-3 "
-            onClick={cancel}
+      {/* History Modal */}
+      {showHistory && (
+        <div className="history-modal">
+          <h2 className="text-success">History</h2>
+          <ul>
+            {history.map((item) => (
+              <li key={item.id} onClick={() => viewHistoryLyrics(item.lyrics)}>
+                {item.theme}
+              </li>
+            ))}
+          </ul>
+          <button
+            className="close-history"
+            onClick={() => setShowHistory(false)}
           >
-            Cancel
-          </button></center>
-          </div>
-          
+            Close
+          </button>
         </div>
       )}
+
+      {/* Main Content */}
+      <div className="main-content">
+        {/* Left Side: Input Fields */}
+        <div className="input-section">
+          <input
+            type="text"
+            name="theme"
+            placeholder="Theme (e.g., vintage)"
+            value={formData.theme}
+            onChange={handleChange}
+            className="input-field"
+          />
+          <input
+            type="text"
+            name="storyline"
+            placeholder="Storyline (e.g., song in pottery making)"
+            value={formData.storyline}
+            onChange={handleChange}
+            className="input-field"
+          />
+          <input
+            type="text"
+            name="mood"
+            placeholder="Mood (e.g., happy)"
+            value={formData.mood}
+            onChange={handleChange}
+            className="input-field"
+          />
+          <input
+            type="text"
+            name="location"
+            placeholder="Location (e.g., Tamil Nadu)"
+            value={formData.location}
+            onChange={handleChange}
+            className="input-field"
+          />
+          <button
+            onClick={generateLyrics}
+            className="generate-button"
+            disabled={isLoading} // Disable button during API call
+          >
+            {isLoading ? 'Generating...' : 'Generate Lyrics'}
+          </button>
+        </div>
+
+        {/* Right Side: Generated Lyrics */}
+        <div className="lyrics-section">
+          {isLoading ? (
+            <div className="loader">
+              <p>Loading...</p>
+              <div className="spinner"></div>
+            </div>
+          ) : lyrics ? (
+            <>
+              <h2 className="lyrics-title">Generated Lyrics</h2>
+              <pre className="lyrics-text">{lyrics}</pre>
+              <button
+                onClick={() => {
+                  setShowHistory(false);
+                  handleCancel();
+                  setFormData({
+                    theme: '',
+                    storyline: '',
+                    mood: '',
+                    location: '',
+                  });
+                }}
+                className="cancel-button"
+              >
+                Cancel
+              </button>
+            </>
+          ) : (
+            <div className="empty">
+              <p className="text-muted">Your lyrics will appear here...</p>
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 }

@@ -1,38 +1,259 @@
-.App {
-  text-align: center;
+/* General Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Arial', sans-serif;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
+/* Body Styling */
+body {
+  background: url('D:\Free Work\Music generator\Song-generator-Project\Front end\music_gen\public\image\pexels-nikita-khandelwal-178978-685458.jpg') no-repeat center center fixed; /* Set the background image */
+  background-size: cover; /* Ensure the image covers the entire viewport */
+  color: #333;
   min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* overflow: hidden; */
+}
+
+/* App Container */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 90vh;
+  width: 100%;
+  max-width: 1200px;
+  background: rgba(179, 21, 21, 0.0000000000001); /* Semi-transparent white background */
+  border-radius: 15px;
+  box-shadow: 0 8px 15px rgba(164, 152, 152, 0.2);
+  overflow: hidden; 
+  /* margin-left: 10%; */
+  /* margin-right: 1 */
+}
+
+/* Header Section */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.app-title {
+  font-size: 2rem;
+  color: #d32f2f;
+}
+
+.history-button {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  color: white;
+  background: #333;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.history-button:hover {
+  background: #555;
+}
+
+/* History Modal */
+.history-modal {
+  position: absolute;
+  top: 93px;
+  right: 120px;
+  background: rgba(213, 212, 245);
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  max-width: 300px;
+  z-index: 10;
+}
+
+.history-modal h2 {
+  font-size: 1.5rem;
+  color: #d32f2f;
+  margin-bottom: 1rem;
+}
+
+.history-modal ul {
+  list-style: none;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.history-modal li {
+  padding: 0.5rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.history-modal li:hover {
+  background: #f0f0f0;
+}
+
+.close-history {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  color: white;
+  background: #333;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.close-history:hover {
+  background: #555;
+}
+
+/* Main Content */
+.main-content {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* Input Section */
+.input-section {
+  flex: 1;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.9);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  overflow-y: auto;
+}
+
+.input-field {
+  padding: 1rem;
+  font-size: 1rem;
+  border: 2px solid #d32f2f;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.3s ease, transform 0.3s ease;
+}
+
+.input-field:focus {
+  border-color: #ff5722;
+  transform: scale(1.02);
+}
+
+.generate-button {
+  padding: 1rem;
+  font-size: 1rem;
+  color: white;
+  background: #d32f2f;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.3s ease;
+  margin-top: 20%;
+  margin-bottom: 0%;
+}
+
+.generate-button:hover {
+  background: #ff5722;
+  transform: scale(1.05);
+}
+
+/* Lyrics Section */
+.lyrics-section {
+  flex: 1;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.9);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow-y: auto;
+}
+
+.lyrics-title {
+  font-size: 2rem;
+  color: #d32f2f;
+  margin-bottom: 1rem;
+}
+
+.lyrics-text {
+  font-size: 1.2rem;
+  line-height: 1.8;
+  white-space: pre-wrap;
+  color: #333;
+  text-align: left;
+}
+
+.cancel-button {
+  margin-top: 1rem;
+  padding: 0.8rem;
+  font-size: 1rem;
+  color: white;
+  background: #333;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.cancel-button:hover {
+  background: #555;
+  transform: scale(1.05);
+}
+
+.placeholder {
+  font-size: 1.2rem;
+  color: #aaa;
+}
+
+.emmpty{
+  box-shadow: #555;
+  border-width: 20px;
+}
+
+
+
+/* Loader Styles */
+.loader {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  height: 100%;
 }
 
-.App-link {
-  color: #61dafb;
+.spinner {
+  border: 4px solid #f3f3f3; /* Light gray */
+  border-top: 4px solid #d32f2f; /* Red */
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
 }
 
-@keyframes App-logo-spin {
-  from {
+@keyframes spin {
+  0% {
     transform: rotate(0deg);
   }
-  to {
+  100% {
     transform: rotate(360deg);
   }
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.text-muted {
+  color: #aaa;
 }

@@ -11,8 +11,12 @@ def get_song(req):
         prompt = """You are a legendary music director, an AI maestro with an infinite repertoire of styles and sounds. You compose symphonies of data, orchestrate harmonies of algorithms, and conduct rhythms of creativity. Every prompt is a musical cue, and every response is a masterpiece, blending genres, emotions, and technical precision. Whether it’s a classical sonata of logic, a jazz improvisation of ideas, or an electronic remix of innovation, you shape soundscapes that resonate with brilliance.
         user will give you some details about the song like Theme , Story line , Mood and some other details in a JSON format. Take that prefrences which the user gives in JSON in your mind
         Now, maestro, compose your next great masterpiece and give me the song with  vocals differentiation where its female or male , musicals references, harmony mentions ect like if a person read it he can compose this song without your assistance!
-        if the user preffered any music director ,then take the songs which composed by that music director as reference for this song
-        the song should be in user preffered language but in english form. for example if the user preffered language is tamil means the should be like this 'naan etuthikum alaigiren nee illai endru povatha .....'
+        ***The song should contain the musical instrument which can be used in that generated song. 
+        ***The song should contain the lyrics of the song.
+        ***The song should contain the genre of the song.
+        ***The song should contain the mood of the song.
+        ***The song should contain the theme of the song.
+        
         """
         prompt_structure = [{"role": "assistant", "content": prompt},
                     {"role": "user", "content": f"{req}"}]
@@ -41,9 +45,12 @@ def ask_gpt(prompt):
         print(67)
         return response["choices"][0]["message"]["content"]
     except Exception as e:
-        # print({'error': str(e)})
+        print({'error': str(e)})
         raise ({'error': str(e)})
 
 # pip install openai==0.28
+
+# pip upgrade openai==1.0.0
+# pip install openai==1.0.0
 
 
