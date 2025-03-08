@@ -1,35 +1,3 @@
-
-// import axios from 'axios';
-// // import { useNavigate } from 'react-router-dom';
-
-// export default async function Client( payload, method) {
-
-// 	const config = {
-// 		method: "POST",
-// 		url: "http://127.0.0.1:8080/music_api",
-// 		headers: {
-// 			'Content-Type': 'application/json', 
-// 			// 'Access-Control-Allow-Origin': "*", "Access-Control-Allow-Header": "*",
-// 		},
-// 	};;
-// 	console.log(config,"config");
-// 	// Include the payload for POST or PUT requests
-// 	if (method === 'POST' || method === 'PUT') {
-// 		config.data = payload; // Axios uses 'data' for request body
-// 	}
-
-// 	try {
-// 		console.log(config, "Client -- before", config.url)
-// 		const response = await axios(config);
-// 		console.log(response, "Client -- after")
-
-// 		return response; // Return the data from the response
-// 	} catch (error) {
-// 		console.error('Error in Client function:', error);
-// 		console.log(error.response.data.message,"statement")
-// 		}
-// 	}
-
 import axios from 'axios';
 
 export default async function Client(payload, method) {

@@ -66,8 +66,6 @@ body {
 /* History Modal */
 .history-modal {
   position: absolute;
-  top: 93px;
-  right: 120px;
   background: rgba(213, 212, 245);
   padding: 1rem;
   border-radius: 8px;
@@ -75,6 +73,19 @@ body {
   max-width: 300px;
   z-index: 10;
 }
+
+
+.history-div-empty{
+  top: 95px;
+  right: 420px;
+}
+
+.history-div-lyrics{
+  top: 93px;
+  right: 120px;
+}
+
+
 
 .history-modal h2 {
   font-size: 1.5rem;
@@ -257,3 +268,13 @@ body {
 .text-muted {
   color: #aaa;
 }
+
+
+
+
+
+
+
+
+
+

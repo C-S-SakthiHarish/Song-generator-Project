@@ -11,6 +11,7 @@ function App() {
   });
 
   const [lyrics, setLyrics] = useState('');
+  const [classnme, setclassnme] = useState('history-div-empty');
   const [history, setHistory] = useState(
     JSON.parse(localStorage.getItem('lyricsHistory')) || []
   );
@@ -34,6 +35,7 @@ function App() {
     }
 
     setIsLoading(true); // Start loader
+    
 
     try {
       // Call the API using the Client function
@@ -47,6 +49,7 @@ function App() {
 
       // Update the lyrics state
       setLyrics(generatedSong);
+    
 
       // Create a template for history
       const lyricsTemplate = `
@@ -63,6 +66,7 @@ function App() {
         { id: Date.now(), theme: theme, lyrics: lyricsTemplate },
         ...history,
       ];
+      setclassnme("history-div-lyrics")
       setHistory(newHistory);
       localStorage.setItem('lyricsHistory', JSON.stringify(newHistory));
     } catch (error) {
@@ -78,6 +82,7 @@ function App() {
   };
 
   const viewHistoryLyrics = (lyrics) => {
+    setclassnme("history-div-lyrics")
     setLyrics(lyrics);
   };
 
@@ -96,9 +101,10 @@ function App() {
 
       {/* History Modal */}
       {showHistory && (
-        <div className="history-modal">
+        <div className={`history-modal ${classnme}`} >
+          {console.log(classnme)}
           <h2 className="text-success">History</h2>
-          <ul>
+          <ul>    
             {history.map((item) => (
               <li key={item.id} onClick={() => viewHistoryLyrics(item.lyrics)}>
                 {item.theme}
@@ -174,6 +180,7 @@ function App() {
                 onClick={() => {
                   setShowHistory(false);
                   handleCancel();
+                  setclassnme("history-div-empty");
                   setFormData({
                     theme: '',
                     storyline: '',
